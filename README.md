@@ -1,7 +1,7 @@
 # [小鱼报] nowinnews
 
 [![License](https://img.shields.io/github/license/qcuncle/nowinnews)](LICENSE)
-[![Version](https://img.shields.io/github/v/release/qcuncle/nowinnews?include_prereleases)](https://github.com/qcuncle/nowinnews/releases)
+[![Version](https://img.shields.io/github/v/release/qcuncle/nowinnews)](https://github.com/qcuncle/nowinnews/releases)
 
 一个采用 Material Design 风格实现的聚合热门网站热榜的app
 
