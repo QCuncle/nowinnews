@@ -1,0 +1,146 @@
+[
+  {
+    "id": 0,
+    "sort": 1,
+    "isSubscribed": false,
+    "delay": 50,
+    "name": "百度",
+    "host": "https://top.baidu.com",
+    "siteUrl": "https://top.baidu.com/board?tab=realtime",
+    "siteIconUrl": "https://www.baidu.com/favicon.ico",
+    "articleXpath": {
+      "position": "//*[@id='sanRoot']//div[2]//div[2]/div[*]/a/div[1]/text()[1]",
+      "title": "//*[@id='sanRoot']//div[2]//div[2]/div[*]/div[2]/a/div[1]/text()[1]",
+      "url": "//*[@id='sanRoot']//div[2]//div[2]/div[*]/div[2]/a/@href",
+      "popularity": "//*[@id='sanRoot']//div[2]//div[2]/div[*]/div[1]/div[2]/text()[1]",
+      "imageUrl": "//*[@id='sanRoot']//div[2]//div[2]/div[*]/a/img/@src",
+      "parameter": "position"
+    }
+  },
+  {
+    "id": 1,
+    "sort": 2,
+    "isSubscribed": false,
+    "delay": 50,
+    "name": "百度贴吧",
+    "host": "https://tieba.baidu.com",
+    "siteUrl": "https://tieba.baidu.com/hottopic/browse/topicList?res_type=1",
+    "siteIconUrl": "https://www.baidu.com/favicon.ico",
+    "articleXpath": {
+      "position": "",
+      "title": "//div[3]//div[2]//div[2]/div[1]/ul/li[*]//div/a/text()[1]",
+      "url": "//div[3]//div[2]//div[2]/div[1]/ul/li[*]//div/a/@href",
+      "popularity": "//div[3]//div[2]//div[2]/div[1]/ul/li[*]//div/span[2]/text()[1]",
+      "imageUrl": "//div[3]//div[2]//div[2]/div[1]/ul/li[*]/img/@src",
+      "parameter": "default"
+    }
+  },
+  {
+    "id": 2,
+    "sort": 3,
+    "isSubscribed": false,
+    "delay": 2500,
+    "name": "微博",
+    "host": "https://s.weibo.com",
+    "siteUrl": "https://s.weibo.com/top/summary",
+    "siteIconUrl": "https://h5.sinaimg.cn/m/weibo-lite/icon-default-192.png",
+    "articleXpath": {
+      "position": "//*[@id='pl_top_realtimehot']/table/tbody/tr[*]/td[1]/text()[1]",
+      "title": "//*[@id='pl_top_realtimehot']//tbody/tr[*]/td[2]/a/text()[1]",
+      "url": "//*[@id='pl_top_realtimehot']//tbody/tr[*]/td[2]/a/@href",
+      "popularity": "//*[@id='pl_top_realtimehot']//tbody/tr[*]/td[2]/span/text()[1]",
+      "imageUrl": "",
+      "parameter": "position"
+    }
+  },
+  {
+    "id": 3,
+    "sort": 4,
+    "isSubscribed": false,
+    "delay": 2500,
+    "name": "抖音",
+    "host": "https://www.douyin.com",
+    "siteUrl": "https://www.douyin.com/hot",
+    "siteIconUrl": "https://p-pc-weboff.byteimg.com/tos-cn-i-9r5gewecjs/favicon.png",
+    "articleXpath": {
+      "position": "//*[@id='douyin-right-container']/div[2]//div[3]/ul/li[*]/div[1]/text()[1]",
+      "title": "//*[@id='douyin-right-container']/div[2]//div[3]/ul/li[*]/div[2]/div[1]/a/h3/text()[1]",
+      "url": "//*[@id='douyin-right-container']/div[2]//div[3]/ul/li[*]/div[2]/div[1]/a/@href",
+      "popularity": "//*[@id='douyin-right-container']/div[2]//div[3]/ul/li[*]/div[2]/div[2]/span[1]/text()[1]",
+      "imageUrl": "",
+      "parameter": "title"
+    }
+  },
+  {
+    "id": 4,
+    "sort": 5,
+    "isSubscribed": false,
+    "delay": 100,
+    "name": "历史上的今天",
+    "host": "https://mjintian.txcx.com",
+    "siteUrl": "https://mjintian.txcx.com/",
+    "siteIconUrl": "",
+    "articleXpath": {
+      "position": "",
+      "title": "//div[3]//div[1]/div[3]/p[*]/a/text()[1]",
+      "url": "//div[3]//div[1]/div[3]/p[*]/a/@href",
+      "popularity": "//div[3]//div[1]/div[3]/p[*]/span/text()[1]",
+      "imageUrl": "",
+      "parameter": "default"
+    }
+  },
+  {
+    "id": 5,
+    "sort": 6,
+    "isSubscribed": false,
+    "delay": 500,
+    "name": "bilibili",
+    "host": "https://www.bilibili.com",
+    "siteUrl": "https://www.bilibili.com/v/popular/rank/all/",
+    "siteIconUrl": "https://www.bilibili.com/favicon.ico",
+    "articleXpath": {
+      "position": "//*[@id='app']//div[2]/div[2]/ul/li[*]//div[1]/i/span/text()[1]",
+      "title": "//*[@id='app']//div[2]/div[2]/ul/li[*]//div[2]/a/text()[1]",
+      "url": "//*[@id='app']//div[2]/div[2]/ul/li[*]//div[2]/a/@href",
+      "popularity": "//*[@id='app']//div[2]/div[2]/ul/li[*]//div[2]//div/span[1]/text()[1]",
+      "imageUrl": "//*[@id='app']//div[2]/div[2]/ul/li[*]//div[1]/a/img/@data-src",
+      "parameter": "default"
+    }
+  },
+  {
+    "id": 6,
+    "sort": 7,
+    "isSubscribed": false,
+    "delay": 500,
+    "name": "知乎",
+    "host": "https://www.zhihu.com/question",
+    "siteUrl": "https://www.zhihu.com/billboard",
+    "siteIconUrl": "https://static.zhihu.com/heifetz/favicon.ico",
+    "articleXpath": {
+      "position": "//*[@id='root']//div/a[*]/div[1]/div[1]/text()[1]",
+      "title": "//*[@id='root']//div/a[*]/div[2]/div[1]/text()[1]",
+      "url": "//*[@id='root']//div/a[*]",
+      "popularity": "//*[@id='root']//div[@class='HotList-itemMetrics']/text()[1]",
+      "imageUrl": "",
+      "parameter": "zhihu"
+    }
+  },
+  {
+    "id": 9,
+    "sort": 10,
+    "isSubscribed": false,
+    "delay": 100,
+    "name": "第一财经",
+    "host": "https://www.yicai.com",
+    "siteUrl": "https://www.yicai.com/",
+    "siteIconUrl": "https://www.yicai.com/favicon.ico",
+    "articleXpath": {
+      "position": "",
+      "title": "//*[@id='headlist']/a[*]//div[2]/h2/text()[1]",
+      "url": "//*[@id='headlist']/a[*]/@href",
+      "popularity": "//*[@id='headlist']/a[*]//div[2]/div/span/text()[1]",
+      "imageUrl": "//*[@id='headlist']/a[*]//div[1]/img/@src",
+      "parameter": "default"
+    }
+  }
+]
