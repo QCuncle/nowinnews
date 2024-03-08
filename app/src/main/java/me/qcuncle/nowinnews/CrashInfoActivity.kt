@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import me.qcuncle.nowinnews.presentation.common.NewsButton
 import me.qcuncle.nowinnews.ui.theme.NinTheme
@@ -53,7 +52,7 @@ class CrashInfoActivity : ComponentActivity() {
                         Text(
                             style = MaterialTheme.typography.titleMedium,
                             text = message,
-                            color = colorResource(id = R.color.black)
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
 
@@ -66,7 +65,7 @@ class CrashInfoActivity : ComponentActivity() {
                                 .border(1.dp, Color.Gray)
                                 .padding(4.dp),
                             text = "Error Stack Trace:\n $cause",
-                            color = colorResource(id = R.color.black)
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
 
