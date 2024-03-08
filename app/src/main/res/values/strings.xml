@@ -7,6 +7,7 @@
     <string name="setting_theme">主题</string>
     <string name="setting_dark_mode">深色模式</string>
     <string name="setting_reset_config">重置订阅配置</string>
+    <string name="setting_upload_config">上传订阅配置</string>
     <string name="setting_hot_num">首页热榜卡片显示条数</string>
     <string name="setting_follow_system">跟随系统</string>
     <string name="setting_close">关闭</string>
@@ -20,7 +21,8 @@
     <string name="dialog_title_delete_bookmark">确认删除此条书签吗?</string>
     <string name="empty_hot_screen">您没有订阅任何热榜，点击右上角开始订阅</string>
     <string name="empty_bookmark_screen">您没有收藏任何书签</string>
-    <string name="setting_desc_reset_config">恢复至App初始的订阅配置</string>
+    <string name="setting_desc_reset_config">恢复至应用初始的订阅配置</string>
+    <string name="setting_desc_upload_config">从 Json 文件中更新订阅配置列表</string>
     <string name="basis">基础</string>
     <string name="other">其他</string>
     <string name="about">关于</string>

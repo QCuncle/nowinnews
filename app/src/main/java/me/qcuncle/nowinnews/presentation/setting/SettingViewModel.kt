@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import me.qcuncle.nowinnews.domain.usecases.userentry.ConfigureSite
 import me.qcuncle.nowinnews.domain.usecases.userentry.ReadDarkMode
 import me.qcuncle.nowinnews.domain.usecases.userentry.ReadNewsShowNumber
 import me.qcuncle.nowinnews.domain.usecases.userentry.ReadThemeConfig
@@ -16,6 +18,7 @@ import me.qcuncle.nowinnews.domain.usecases.userentry.SaveDarkMode
 import me.qcuncle.nowinnews.domain.usecases.userentry.SaveNewsShowNumber
 import me.qcuncle.nowinnews.domain.usecases.userentry.SaveThemeConfig
 import me.qcuncle.nowinnews.util.Constant
+import me.qcuncle.nowinnews.util.showToast
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,6 +30,7 @@ class SettingViewModel @Inject constructor(
     private val readThemeConfig: ReadThemeConfig,
     private val saveThemeConfig: SaveThemeConfig,
     private val resetSiteConfigure: ResetSiteConfigure,
+    private val configureSite: ConfigureSite,
 ) : ViewModel() {
 
     private val _showNum = MutableStateFlow(Constant.NUMBER_OF_ARTICLES_DEFAULT)
@@ -87,6 +91,16 @@ class SettingViewModel @Inject constructor(
                 }
             }
 
+            is SettingEvent.UploadSubscriptionConfiguration -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    val tip = event.jsonString?.let {
+                        if (configureSite(event.jsonString)) "配置成功" else "配置失败，请检查规则是否正确"
+                    } ?: "配置为空"
+                    withContext(Dispatchers.Main) {
+                        event.context.showToast(tip)
+                    }
+                }
+            }
         }
     }
 }

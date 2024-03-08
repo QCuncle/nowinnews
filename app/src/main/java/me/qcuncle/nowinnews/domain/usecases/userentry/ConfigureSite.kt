@@ -6,7 +6,7 @@ import javax.inject.Inject
 class ConfigureSite @Inject constructor(
     private val subscriptionManager: SubscriptionManager
 ) {
-    suspend operator fun invoke(jsonString: String) {
-        subscriptionManager.configureSiteInfo(jsonString)
+    suspend operator fun invoke(jsonString: String): Boolean {
+        return subscriptionManager.configureSiteInfo(jsonString)
     }
 }

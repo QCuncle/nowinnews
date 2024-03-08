@@ -1,5 +1,9 @@
 package me.qcuncle.nowinnews.presentation.setting
 
+import android.annotation.SuppressLint
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,7 +21,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
@@ -57,8 +60,12 @@ import me.qcuncle.nowinnews.ui.theme.Color9
 import me.qcuncle.nowinnews.util.getAppVersionCode
 import me.qcuncle.nowinnews.util.getAppVersionName
 import me.qcuncle.nowinnews.util.jumpToBrowser
+import me.qcuncle.nowinnews.util.showToast
 import okhttp3.internal.toHexString
+import okio.IOException
+import java.io.InputStream
 
+@SuppressLint("Recycle")
 @Composable
 fun SettingScreen(
     newsShowNum: Int,
@@ -72,6 +79,41 @@ fun SettingScreen(
     var showDarkModeSelectDialog by remember { mutableStateOf(false) }
     var showThemeSelectDialog by remember { mutableStateOf(false) }
     var showRestConfig by remember { mutableStateOf(false) }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        // 处理选择的文件的 Uri
+        uri?.let {
+            try {
+                val isJsonFile = uri.path?.endsWith(".json", true)
+                if (isJsonFile == null || isJsonFile == false) {
+                    context.showToast("文件格式不支持")
+                    return@let
+                }
+                val contentResolver = context.contentResolver
+                val inputStream: InputStream? = contentResolver.openInputStream(uri)
+                if (inputStream != null) {
+                    val bufferSize = 1024
+                    val buffer = ByteArray(bufferSize)
+                    var bytesRead: Int
+                    val stringBuilder = StringBuilder()
+
+                    while (inputStream.read(buffer, 0, bufferSize).also { bytesRead = it } != -1) {
+                        // 处理每次读取的数据
+                        val chunk = buffer.copyOfRange(0, bytesRead)
+                        stringBuilder.append(String(chunk))
+                    }
+                    val jsonString = stringBuilder.toString()
+                    event(SettingEvent.UploadSubscriptionConfiguration(context, jsonString))
+                } else {
+                    context.showToast("Failed to open InputStream")
+                }
+            } catch (e: IOException) {
+                context.showToast(e.message)
+            }
+        }
+    }
 
     val darkModeDesc = when (darkMode) {
         0 -> stringResource(R.string.setting_open)
@@ -121,6 +163,15 @@ fun SettingScreen(
             title = stringResource(R.string.setting_reset_config),
             content = stringResource(R.string.setting_desc_reset_config),
             onClick = { showRestConfig = true }
+        )
+
+        SettingItem(
+            icon = R.drawable.baseline_upload_file_24,
+            title = stringResource(R.string.setting_upload_config),
+            content = stringResource(R.string.setting_desc_upload_config),
+            onClick = {
+                launcher.launch("application/json")
+            }
         )
 
         Text(
