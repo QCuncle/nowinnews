@@ -33,6 +33,10 @@ android {
     }
 
     applicationVariants.all {
+        if (buildType.isDebuggable) {
+            // 对于 debug 构建类型，设置应用名称为 "YourAppName-Debug"
+            resValue("string", "app_name", "nowinnews-debug")
+        }
         outputs.all {
             archivesName.set("nowinnews-v${versionName}")
         }
@@ -64,6 +68,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-debug"
             signingConfig = signConfig
         }
     }
