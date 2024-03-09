@@ -28,6 +28,8 @@ An app gathering hot lists from popular websites using material design.
 - [ ] 更多待续...
 - [ ] more...
 
+> 欢迎提交 pr 和 issue 以支持更多的网站
+
 
 
 ### 支持的功能
@@ -39,7 +41,8 @@ An app gathering hot lists from popular websites using material design.
 - [x] 深色模式 / 主题切换
 - [x] 卡片显示条数设置
 - [x] 重置订阅配置
-- [ ] 更新/上传配置
+- [x] 更新/上传配置
+- [ ] 导出并分享配置
 - [ ] 搜索
 
 
