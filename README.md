@@ -95,6 +95,8 @@ An app gathering hot lists from popular websites using material design.
 
 > 应用默认的订阅配置参见：[XpathConfig.json](https://github.com/QCuncle/nowinnews/blob/main/app/src/main/assets/XpathConfig.json)
 >
+> 更多的订阅配置参见（下载对应的 JSON 文件导入）：[site_xpath_configs](https://github.com/QCuncle/site_xpath_configs)
+>
 > 详细逻辑参见:  [me.qcuncle.nowinnews.data.remote.xpath](https://github.com/QCuncle/nowinnews/tree/main/app/src/main/java/me/qcuncle/nowinnews/data/remote/xpath)
 
 
