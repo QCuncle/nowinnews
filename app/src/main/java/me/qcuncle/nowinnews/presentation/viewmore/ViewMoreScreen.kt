@@ -183,7 +183,7 @@ fun ViewMoreItem(
 
         Column(
             modifier = Modifier
-                .weight(6f)
+                .weight(8f)
                 .padding(horizontal = 16.dp)
         ) {
             val textStyle = if (article.position > 3) MaterialTheme.typography.bodyLarge
@@ -204,7 +204,7 @@ fun ViewMoreItem(
 
         NewsButton(
             text = "收藏",
-            modifier = Modifier.weight(4f)
+            modifier = Modifier.weight(2f)
         ) {
             context.showToast("收藏成功")
             addBookmark(article)
