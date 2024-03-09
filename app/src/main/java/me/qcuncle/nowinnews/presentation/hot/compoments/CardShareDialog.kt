@@ -61,8 +61,6 @@ fun CardShareDialog(
     onDismiss: () -> Unit,
     onShare: (Bitmap?, String) -> Unit
 ) {
-    // 创建一个用于保存图片的目录
-    val context = LocalContext.current
     val imageDirectory = LocalContext.current.externalCacheDir
     imageDirectory?.mkdirs()
     val captureController = rememberCaptureController()

@@ -166,6 +166,15 @@ fun SettingScreen(
         )
 
         SettingItem(
+            icon = R.drawable.baseline_export_24,
+            title = stringResource(R.string.setting_export_config),
+            content = stringResource(R.string.setting_desc_export_config),
+            onClick = {
+                event(SettingEvent.ExportFile(context))
+            }
+        )
+
+        SettingItem(
             icon = R.drawable.baseline_upload_file_24,
             title = stringResource(R.string.setting_upload_config),
             content = stringResource(R.string.setting_desc_upload_config),

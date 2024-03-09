@@ -10,4 +10,6 @@ sealed class SettingEvent {
     data class UploadSubscriptionConfiguration(
         val context: Context, val jsonString: String?
     ) : SettingEvent()
+
+    data class ExportFile(val context: Context) : SettingEvent()
 }
