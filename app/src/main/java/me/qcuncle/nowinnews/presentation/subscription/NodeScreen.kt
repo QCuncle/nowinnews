@@ -128,29 +128,33 @@ fun SiteItem(
 
         Text(
             text = siteConfig.name,
-            style = MaterialTheme.typography.bodyLarge.copy(
+            style = MaterialTheme.typography.bodyMedium.copy(
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Normal
             ),
             lineHeight = 20.sp,
-            modifier = Modifier.fillMaxWidth(0.5f)
+            modifier = Modifier.fillMaxWidth(0.4f)
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
-        ThemedXmlDrawable(
-            drawableResId = R.drawable.baseline_topping_24,
-            iconColor = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .padding(end = 8.dp)
-                .clip(CircleShape)
-                .clickable {
-                    if (siteConfig.sort != 0) {
-                        event(NodeEvent.ToppingEvent(siteConfig))
-                    }
-                }
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-        )
+        if (siteConfig.isSubscribed && siteConfig.sort > 0) {
+            ThemedXmlDrawable(
+                drawableResId = R.drawable.baseline_topping_24,
+                iconColor = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .clip(CircleShape)
+                    .clickable(
+                        interactionSource = null,
+                        indication = null,
+                        onClick = {
+                            event(NodeEvent.ToppingEvent(siteConfig))
+                        }
+                    )
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+        }
 
         if (siteConfig.isSubscribed) {
             NewsCancelButton(text = "取消订阅") {

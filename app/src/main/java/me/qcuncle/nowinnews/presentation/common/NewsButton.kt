@@ -11,10 +11,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import me.qcuncle.nowinnews.ui.theme.NinTheme
 
 @Composable
@@ -26,7 +27,7 @@ fun NewsButton(
     Button(
         onClick = onClick,
         contentPadding = PaddingValues(
-            horizontal = 18.dp,
+            horizontal = 20.dp,
             vertical = 4.dp
         ),
         colors = ButtonDefaults.buttonColors(
@@ -37,12 +38,18 @@ fun NewsButton(
         elevation = ButtonDefaults.elevatedButtonElevation(
             defaultElevation = 2.dp, // 设置按钮的默认阴影高度
             pressedElevation = 8.dp // 设置按钮在被按下时的阴影高度
-        )
+        ),
+        modifier = Modifier.then(modifier)
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
-            color = MaterialTheme.colorScheme.onPrimary
+            style = MaterialTheme.typography.bodyMedium.copy(
+                fontWeight = FontWeight.Medium,
+                fontSize = 13.sp
+            ),
+            color = MaterialTheme.colorScheme.onPrimary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
@@ -56,7 +63,7 @@ fun NewsCancelButton(
     Button(
         onClick = onClick,
         contentPadding = PaddingValues(
-            horizontal = 18.dp,
+            horizontal = 20.dp,
             vertical = 4.dp
         ),
         colors = ButtonDefaults.buttonColors(
@@ -67,12 +74,18 @@ fun NewsCancelButton(
         elevation = ButtonDefaults.elevatedButtonElevation(
             defaultElevation = 2.dp, // 设置按钮的默认阴影高度
             pressedElevation = 8.dp // 设置按钮在被按下时的阴影高度
-        )
+        ),
+        modifier = Modifier.then(modifier)
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
-            color = MaterialTheme.colorScheme.onSecondaryContainer
+            style = MaterialTheme.typography.bodyMedium.copy(
+                fontWeight = FontWeight.Medium,
+                fontSize = 13.sp
+            ),
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
@@ -107,7 +120,8 @@ fun NewsCancelTextButton(
         shape = RoundedCornerShape(size = 32.dp),
         colors = ButtonDefaults.textButtonColors().copy(
             contentColor = MaterialTheme.colorScheme.error
-        )
+        ),
+        modifier = Modifier.then(modifier)
     ) {
         Text(
             text = text,

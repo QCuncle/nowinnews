@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -37,7 +36,7 @@ import coil.request.ImageRequest
 import me.qcuncle.nowinnews.R
 import me.qcuncle.nowinnews.domain.model.Article
 import me.qcuncle.nowinnews.domain.model.SiteEntity
-import me.qcuncle.nowinnews.ui.components.ThemedXmlDrawable
+import me.qcuncle.nowinnews.presentation.common.NewsButton
 import me.qcuncle.nowinnews.ui.theme.NinTheme
 import me.qcuncle.nowinnews.util.formatTime
 import me.qcuncle.nowinnews.util.jumpToBrowser
@@ -184,7 +183,7 @@ fun ViewMoreItem(
 
         Column(
             modifier = Modifier
-                .weight(9f)
+                .weight(6f)
                 .padding(horizontal = 16.dp)
         ) {
             val textStyle = if (article.position > 3) MaterialTheme.typography.bodyLarge
@@ -199,20 +198,17 @@ fun ViewMoreItem(
                 text = article.popularity,
                 textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.secondary
             )
         }
 
-        ThemedXmlDrawable(
-            drawableResId = R.drawable.baseline_star_24,
-            modifier = Modifier
-                .weight(1f)
-                .clip(CircleShape)
-                .clickable {
-                    context.showToast("收藏成功")
-                    addBookmark(article)
-                },
-            iconColor = MaterialTheme.colorScheme.primary
-        )
+        NewsButton(
+            text = "收藏",
+            modifier = Modifier.weight(4f)
+        ) {
+            context.showToast("收藏成功")
+            addBookmark(article)
+        }
     }
 
     if (showLine) {

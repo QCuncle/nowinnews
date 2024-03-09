@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -25,7 +24,7 @@ fun ThemedXmlDrawable(
     modifier: Modifier,
 ) {
     val context = LocalContext.current
-    var xmlDrawable by remember(drawableResId) {
+    val xmlDrawable by remember(drawableResId) {
         mutableStateOf(context.getDrawable(drawableResId))
     }
 
