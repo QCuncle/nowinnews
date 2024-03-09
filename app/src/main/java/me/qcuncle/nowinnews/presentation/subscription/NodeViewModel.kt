@@ -37,6 +37,8 @@ class NodeViewModel @Inject constructor(
 
     private var _currentState = SubscriptionStatus.IDLE
 
+    private val subscriptionMap = hashMapOf<Int, Boolean>()
+
     init {
         // Observe changes in remoteData and update _hotData accordingly
         viewModelScope.launch(Dispatchers.IO) {
@@ -51,6 +53,7 @@ class NodeViewModel @Inject constructor(
                 .collect {
                     // 只有真正订阅成功才修改订阅状态
                     subscriptionSite(it.id)
+                    subscriptionMap[it.id] = true
                     setDialogStatus(SubscriptionStatus.SUCCESS)
                     delay(1500)
                     if (_currentState == SubscriptionStatus.SUCCESS) {
@@ -71,7 +74,7 @@ class NodeViewModel @Inject constructor(
                 viewModelScope.launch {
                     setDialogStatus(SubscriptionStatus.SUBSCRIBING)
                     delay(8000)
-                    if (_currentState == SubscriptionStatus.SUBSCRIBING) {
+                    if (subscriptionMap[event.id] != true && _currentState == SubscriptionStatus.SUBSCRIBING) {
                         setDialogStatus(SubscriptionStatus.FAILED)
                         delay(1500)
                         if (_currentState == SubscriptionStatus.FAILED) {
@@ -84,6 +87,7 @@ class NodeViewModel @Inject constructor(
             is NodeEvent.UnsubscribeEvent -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     unsubscribeSite(event.id)
+                    subscriptionMap[event.id] = false
                 }
             }
 
