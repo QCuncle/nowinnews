@@ -93,6 +93,8 @@ An app gathering hot lists from popular websites using material design.
 | imageUrl   | 图片地址      | 否       |
 | parameter  | 解析规则      | 是       |
 
+> 应用默认的订阅配置参见：[XpathConfig.json](https://github.com/QCuncle/nowinnews/blob/main/app/src/main/assets/XpathConfig.json)
+>
 > 详细逻辑参见:  [me.qcuncle.nowinnews.data.remote.xpath](https://github.com/QCuncle/nowinnews/tree/main/app/src/main/java/me/qcuncle/nowinnews/data/remote/xpath)
 
 
