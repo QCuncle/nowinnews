@@ -10,9 +10,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import me.qcuncle.nowinnews.domain.model.SiteConfig
 import me.qcuncle.nowinnews.domain.usecases.node.GetSiteConfigs
+import me.qcuncle.nowinnews.domain.usecases.node.InsertSiteConfig
 import me.qcuncle.nowinnews.domain.usecases.node.SubscriptionSite
 import me.qcuncle.nowinnews.domain.usecases.node.UnsubscribeSite
 import me.qcuncle.nowinnews.presentation.subscription.compoments.SubscriptionStatus
@@ -24,6 +26,7 @@ class NodeViewModel @Inject constructor(
     private val getSiteConfigs: GetSiteConfigs,
     private val subscriptionSite: SubscriptionSite,
     private val unsubscribeSite: UnsubscribeSite,
+    private val insertSiteConfig: InsertSiteConfig,
 ) : ViewModel() {
 
     private val _nodeData = MutableStateFlow(emptyList<SiteConfig>())
@@ -81,6 +84,25 @@ class NodeViewModel @Inject constructor(
             is NodeEvent.UnsubscribeEvent -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     unsubscribeSite(event.id)
+                }
+            }
+
+            is NodeEvent.ToppingEvent -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    // 将目标 SiteConfig 置顶（将其 sort 设为最小值）
+                    val updatedSiteConfigs = getSiteConfigs().first()
+                    val targetSort = event.siteConfig.sort
+
+                    // 更新其他 SiteConfig 的 sort 字段，确保排序的一致性
+                    updatedSiteConfigs.forEach point@{ siteConfig ->
+                        if (siteConfig.sort > targetSort) return@point
+                        if (siteConfig.id == event.siteConfig.id) {
+                            siteConfig.sort = 0
+                        } else {
+                            siteConfig.sort += 1
+                        }
+                    }
+                    insertSiteConfig(updatedSiteConfigs)
                 }
             }
         }

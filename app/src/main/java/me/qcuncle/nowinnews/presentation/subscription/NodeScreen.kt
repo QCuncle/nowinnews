@@ -2,6 +2,7 @@ package me.qcuncle.nowinnews.presentation.subscription
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -37,6 +39,7 @@ import me.qcuncle.nowinnews.presentation.common.NewsButton
 import me.qcuncle.nowinnews.presentation.common.NewsCancelButton
 import me.qcuncle.nowinnews.presentation.subscription.compoments.SubscriptionDialog
 import me.qcuncle.nowinnews.presentation.subscription.compoments.SubscriptionStatus
+import me.qcuncle.nowinnews.ui.components.ThemedXmlDrawable
 import me.qcuncle.nowinnews.ui.theme.NinTheme
 
 @Composable
@@ -87,6 +90,7 @@ fun SiteItem(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
+            .padding(vertical = 6.dp)
             .fillMaxWidth(),
     ) {
         if (siteConfig.siteIconUrl.isEmpty()) {
@@ -121,48 +125,44 @@ fun SiteItem(
                     .clip(RoundedCornerShape(8.dp))
             )
         }
-        Column(
+
+        Text(
+            text = siteConfig.name,
+            style = MaterialTheme.typography.bodyLarge.copy(
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Normal
+            ),
+            lineHeight = 20.sp,
+            modifier = Modifier.fillMaxWidth(0.5f)
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        ThemedXmlDrawable(
+            drawableResId = R.drawable.baseline_topping_24,
+            iconColor = MaterialTheme.colorScheme.primary,
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(8f)
-                .padding(vertical = 24.dp)
-        ) {
-            Text(
-                text = siteConfig.name,
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Normal
-                ),
-            )
-//            val context = LocalContext.current
-//            Text(
-//                text = siteConfig.siteUrl,
-//                style = MaterialTheme.typography.labelMedium,
-//                color = MaterialTheme.colorScheme.primary,
-//                textDecoration = TextDecoration.Underline,
-//                modifier = Modifier.clickable {
-//                    context.jumpToBrowser(siteConfig.siteUrl)
-//                }
-//            )
-        }
+                .padding(end = 8.dp)
+                .clip(CircleShape)
+                .clickable {
+                    if (siteConfig.sort != 0) {
+                        event(NodeEvent.ToppingEvent(siteConfig))
+                    }
+                }
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+        )
 
         if (siteConfig.isSubscribed) {
-            NewsCancelButton(
-                modifier = Modifier.weight(3f),
-                text = "取消订阅"
-            ) {
+            NewsCancelButton(text = "取消订阅") {
                 event(NodeEvent.UnsubscribeEvent(siteConfig.id))
             }
         } else {
-            NewsButton(
-                modifier = Modifier.weight(3f),
-                text = "订阅"
-            ) {
+            NewsButton(text = "订阅") {
                 event(NodeEvent.SubscriptionEvent(siteConfig.id))
             }
         }
 
-        Spacer(modifier = Modifier.size(8.dp))
+        Spacer(modifier = Modifier.size(16.dp))
     }
 
     Spacer(

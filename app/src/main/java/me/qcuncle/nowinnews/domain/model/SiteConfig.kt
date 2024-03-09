@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 @Entity
 data class SiteConfig(
     @PrimaryKey val id: Int,
-    val sort: Int,
+    var sort: Int,
     val name: String,
     val host: String,
     val isSubscribed: Boolean,
