@@ -12,6 +12,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,8 +32,9 @@ fun HotListScreen(
     isLoading: Boolean,
     isEmpty: Boolean,
     siteEntities: List<SiteEntity>,
+    onBottomBarVisible: (Boolean) -> Unit,
     event: (HotEvent) -> Unit,
-    viewMore: (Int) -> Unit
+    viewMore: (Int) -> Unit,
 ) {
     var showShareDialog by remember {
         mutableStateOf(false)
@@ -39,12 +44,32 @@ fun HotListScreen(
         mutableStateOf<SiteEntity?>(null)
     }
 
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                return if (available.y > 0) {
+                    onBottomBarVisible(true)
+                    Offset.Zero
+                } else if (available.y < 0) {
+                    onBottomBarVisible(false)
+                    Offset.Zero
+                } else {
+                    super.onPreScroll(available, source)
+                }
+            }
+        }
+    }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
 
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .nestedScroll(nestedScrollConnection)
+        ) {
             items(siteEntities) { siteEntity ->
                 HotArticleCard(
                     siteEntity = siteEntity,

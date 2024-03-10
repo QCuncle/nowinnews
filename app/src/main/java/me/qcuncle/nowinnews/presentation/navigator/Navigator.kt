@@ -1,6 +1,10 @@
 package me.qcuncle.nowinnews.presentation.navigator
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -87,12 +91,20 @@ fun Navigator() {
                 backStackState?.destination?.route == Route.NodeScreen.route
     }
 
-    //Hide the bottom navigation when the user is in the details screen
-    val isBottomBarVisible = remember(key1 = backStackState) {
-        backStackState?.destination?.route == Route.HotListScreen.route ||
+    var isBottomBarVisible by remember { mutableStateOf(true) }
+
+    LaunchedEffect(backStackState) {
+        isBottomBarVisible = backStackState?.destination?.route == Route.HotListScreen.route ||
                 backStackState?.destination?.route == Route.BookMarkScreen.route ||
                 backStackState?.destination?.route == Route.SettingsScreen.route
     }
+
+//    //Hide the bottom navigation when the user is in the details screen
+//    var isBottomBarVisible = remember(key1 = backStackState) {
+//        backStackState?.destination?.route == Route.HotListScreen.route ||
+//                backStackState?.destination?.route == Route.BookMarkScreen.route ||
+//                backStackState?.destination?.route == Route.SettingsScreen.route
+//    }
 
     var pageTitle by remember { mutableStateOf(titleHotList) }
 
@@ -118,7 +130,17 @@ fun Navigator() {
             }
         },
         bottomBar = {
-            if (isBottomBarVisible) {
+            AnimatedVisibility(
+                visible = isBottomBarVisible,
+                enter = slideInVertically(
+                    initialOffsetY = { fullHeight -> fullHeight },
+                    animationSpec = tween(durationMillis = 300)
+                ),
+                exit = slideOutVertically(
+                    targetOffsetY = { fullHeight -> fullHeight },
+                    animationSpec = tween(durationMillis = 300)
+                )
+            ) {
                 BottomNavigation(
                     items = bottomNavigationItems,
                     selectedItem = selectedItem,
@@ -144,11 +166,12 @@ fun Navigator() {
             }
         }) {
         val topPadding = it.calculateTopPadding()
-        val bottomPadding = it.calculateBottomPadding()
+        // val bottomPadding = it.calculateBottomPadding()
+
         NavHost(
             navController = navController,
             startDestination = Route.HotListScreen.route,
-            modifier = Modifier.padding(top = topPadding, bottom = bottomPadding)
+            modifier = Modifier.padding(top = topPadding)
         ) {
             composable(route = Route.HotListScreen.route) {
                 pageTitle = titleHotList
@@ -157,12 +180,19 @@ fun Navigator() {
                 val isLoading = viewModel.isLoading
                 val isEmpty = viewModel.isEmpty
                 HotListScreen(
-                    isLoading.value,
-                    isEmpty.value,
-                    siteEntities.value,
-                    viewModel::onEvent,
+                    isLoading = isLoading.value,
+                    isEmpty = isEmpty.value,
+                    siteEntities = siteEntities.value,
+                    event = viewModel::onEvent,
                     viewMore = { id ->
                         navigateToViewMore(navController, id)
+                    },
+                    onBottomBarVisible = { visible ->
+                        if (visible && !isBottomBarVisible) {
+                            isBottomBarVisible = true
+                        } else if (!visible && isBottomBarVisible) {
+                            isBottomBarVisible = false
+                        }
                     }
                 )
             }
