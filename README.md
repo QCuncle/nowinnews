@@ -28,6 +28,8 @@ An app gathering hot lists from popular websites using material design.
 - [ ] 更多待续...
 - [ ] more...
 
+> 更多的订阅配置参见（下载对应的 JSON 文件导入）：[site_xpath_configs](https://github.com/QCuncle/site_xpath_configs)
+>
 > 欢迎提交 pr 和 issue 以支持更多的网站
 
 
@@ -42,7 +44,7 @@ An app gathering hot lists from popular websites using material design.
 - [x] 卡片显示条数设置
 - [x] 重置订阅配置
 - [x] 更新/上传配置
-- [ ] 导出并分享配置
+- [x] 导出并分享配置
 - [ ] 搜索
 
 
@@ -94,8 +96,6 @@ An app gathering hot lists from popular websites using material design.
 | parameter  | 解析规则      | 是       |
 
 > 应用默认的订阅配置参见：[XpathConfig.json](https://github.com/QCuncle/nowinnews/blob/main/app/src/main/assets/XpathConfig.json)
->
-> 更多的订阅配置参见（下载对应的 JSON 文件导入）：[site_xpath_configs](https://github.com/QCuncle/site_xpath_configs)
 >
 > 详细逻辑参见:  [me.qcuncle.nowinnews.data.remote.xpath](https://github.com/QCuncle/nowinnews/tree/main/app/src/main/java/me/qcuncle/nowinnews/data/remote/xpath)
 
