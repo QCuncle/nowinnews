@@ -98,12 +98,12 @@ class NodeViewModel @Inject constructor(
                     val targetSort = event.siteConfig.sort
 
                     // 更新其他 SiteConfig 的 sort 字段，确保排序的一致性
-                    updatedSiteConfigs.forEach point@{ siteConfig ->
+                    updatedSiteConfigs.forEachIndexed point@{ index, siteConfig ->
                         if (siteConfig.sort > targetSort) return@point
                         if (siteConfig.id == event.siteConfig.id) {
                             siteConfig.sort = 0
                         } else {
-                            siteConfig.sort += 1
+                            siteConfig.sort = index + 1
                         }
                     }
                     insertSiteConfig(updatedSiteConfigs)
