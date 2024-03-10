@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import me.qcuncle.nowinnews.R
-import me.qcuncle.nowinnews.domain.model.Article
 import me.qcuncle.nowinnews.domain.model.Bookmark
 import me.qcuncle.nowinnews.presentation.common.NewsCancelTextButton
 import me.qcuncle.nowinnews.presentation.common.NewsTextButton
@@ -153,6 +152,7 @@ fun BookMarkItem(
                 text = bookmark.popularity,
                 textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.secondary
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (bookmark.siteIconUrl.isEmpty()) {
