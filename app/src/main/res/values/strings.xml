@@ -4,6 +4,7 @@
     <string name="bookmark">书签</string>
     <string name="setting">设置</string>
     <string name="subscription">订阅</string>
+    <string name="unsubscribe">退订</string>
     <string name="setting_theme">主题</string>
     <string name="setting_dark_mode">深色模式</string>
     <string name="setting_reset_config">重置订阅配置</string>

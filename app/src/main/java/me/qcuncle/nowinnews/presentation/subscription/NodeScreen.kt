@@ -163,11 +163,11 @@ fun SiteItem(
         }
 
         if (siteConfig.isSubscribed) {
-            NewsCancelButton(text = "取消订阅") {
+            NewsCancelButton(text = stringResource(R.string.unsubscribe)) {
                 event(NodeEvent.UnsubscribeEvent(siteConfig.id))
             }
         } else {
-            NewsButton(text = "订阅") {
+            NewsButton(text = stringResource(id = R.string.subscription)) {
                 event(NodeEvent.SubscriptionEvent(siteConfig.id))
             }
         }
