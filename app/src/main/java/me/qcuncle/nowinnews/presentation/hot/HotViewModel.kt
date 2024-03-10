@@ -18,14 +18,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.qcuncle.nowinnews.data.local.SiteConfigDao
 import me.qcuncle.nowinnews.domain.model.SiteConfig
 import me.qcuncle.nowinnews.domain.model.SiteEntity
 import me.qcuncle.nowinnews.domain.usecases.news.GetHotArticles
-import me.qcuncle.nowinnews.domain.usecases.news.RefreshArticles
 import me.qcuncle.nowinnews.domain.usecases.userentry.ReadNewsShowNumber
 import me.qcuncle.nowinnews.presentation.subscription.SharedViewModel
 import me.qcuncle.nowinnews.util.findActivity
@@ -143,9 +141,8 @@ class HotViewModel @Inject constructor(
 
 
     private suspend fun updateRemoteData(remoteData: SiteEntity) {
-        withContext(Dispatchers.Main) {
+        withContext(Dispatchers.IO) {
             // Your existing code for handling remote data
-            _isLoading.value = false
             val currentHotData = _hotData.value.toMutableList()
 
             // Fetch the sort value for the remoteData from the corresponding SiteConfig
@@ -172,6 +169,7 @@ class HotViewModel @Inject constructor(
                 _hotData.value = currentHotData
                 _isEmpty.value = currentHotData.isEmpty()
             }
+            _isLoading.value = false
         }
     }
 
