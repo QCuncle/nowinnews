@@ -2,6 +2,9 @@
 
 [![License](https://img.shields.io/github/license/qcuncle/nowinnews)](LICENSE)
 [![Version](https://img.shields.io/github/v/release/qcuncle/nowinnews)](https://github.com/qcuncle/nowinnews/releases)
+[![Downloads](https://img.shields.io/github/downloads/qcuncle/nowinnews/total)](https://github.com/qcuncle/nowinnews/releases)
+
+
 
 一个采用 Material Design 风格实现的聚合热门网站热榜的app
 
@@ -15,7 +18,7 @@ An app gathering hot lists from popular websites using material design.
 
 
 
-### 支持订阅的网站
+## 支持订阅的网站
 
 - [x] 百度
 - [x] 百度贴吧
@@ -34,7 +37,7 @@ An app gathering hot lists from popular websites using material design.
 
 
 
-### 支持的功能
+## 支持的功能
 
 - [x] 热榜信息查看
 - [x] 收藏书签
@@ -49,7 +52,7 @@ An app gathering hot lists from popular websites using material design.
 
 
 
-### xpath 规则配置说明，以 bilibili 为例
+## xpath 规则配置说明，以 bilibili 为例
 
 ```json
 {
@@ -101,7 +104,7 @@ An app gathering hot lists from popular websites using material design.
 
 
 
-### Thinks
+## Thinks
 
 应用使用 Material 默认图标，主题和配色由 Material Theme Builder 构建 [Material Design](https://m3.material.io/theme-builder#/custom).
 
@@ -109,6 +112,6 @@ An app gathering hot lists from popular websites using material design.
 
 
 
-### License
+## License
 
 This App is under Apache-2.0 license.
