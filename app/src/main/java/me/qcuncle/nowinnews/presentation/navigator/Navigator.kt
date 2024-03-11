@@ -202,7 +202,18 @@ fun Navigator() {
                 val viewModel: BookmarkViewModel = hiltViewModel()
                 val bookmarks = viewModel.data.collectAsState(initial = emptyList())
                 val isEmpty = viewModel.isEmpty
-                BookmarkScreen(bookmarks.value, isEmpty.value, viewModel::onEvent)
+                BookmarkScreen(
+                    bookmarks = bookmarks.value,
+                    isEmpty = isEmpty.value,
+                    onBottomBarVisible = { visible ->
+                        if (visible && !isBottomBarVisible) {
+                            isBottomBarVisible = true
+                        } else if (!visible && isBottomBarVisible) {
+                            isBottomBarVisible = false
+                        }
+                    },
+                    event = viewModel::onEvent
+                )
             }
             composable(route = Route.SettingsScreen.route) {
                 pageTitle = titleSetting
@@ -214,6 +225,13 @@ fun Navigator() {
                     newsShowNum = showNum.value,
                     darkMode = darkMode.value,
                     themeIndex = themeIndex.value,
+                    onBottomBarVisible = { visible ->
+                        if (visible && !isBottomBarVisible) {
+                            isBottomBarVisible = true
+                        } else if (!visible && isBottomBarVisible) {
+                            isBottomBarVisible = false
+                        }
+                    },
                     event = viewModel::onEvent
                 )
             }

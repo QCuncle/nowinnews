@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,6 +26,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -48,12 +53,33 @@ import me.qcuncle.nowinnews.util.jumpToBrowser
 fun BookmarkScreen(
     bookmarks: List<Bookmark>,
     isEmpty: Boolean,
+    onBottomBarVisible: (Boolean) -> Unit,
     event: (BookmarkEvent) -> Unit
 ) {
     var showDeleteDialog by remember { mutableStateOf(false) }
     var delArticleUrl by remember { mutableStateOf<String>("") }
 
-    LazyColumn {
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                return if (available.y > 0) {
+                    onBottomBarVisible(true)
+                    Offset.Zero
+                } else if (available.y < 0) {
+                    onBottomBarVisible(false)
+                    Offset.Zero
+                } else {
+                    super.onPreScroll(available, source)
+                }
+            }
+        }
+    }
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(nestedScrollConnection)
+    ) {
         items(bookmarks) { bookmark ->
             BookMarkItem(
                 bookmark,

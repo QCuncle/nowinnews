@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,7 +34,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -71,6 +75,7 @@ fun SettingScreen(
     newsShowNum: Int,
     darkMode: Int,
     themeIndex: Int,
+    onBottomBarVisible: (Boolean) -> Unit,
     event: (SettingEvent) -> Unit
 ) {
 
@@ -124,89 +129,110 @@ fun SettingScreen(
     val colorHex = MaterialTheme.colorScheme.primary
         .toArgb().toHexString().toUpperCase(Locale.current)
 
-    Column(
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                return if (available.y > 0) {
+                    onBottomBarVisible(true)
+                    Offset.Zero
+                } else if (available.y < 0) {
+                    onBottomBarVisible(false)
+                    Offset.Zero
+                } else {
+                    super.onPreScroll(available, source)
+                }
+            }
+        }
+    }
+
+    Box(
         modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .fillMaxHeight()
+            .nestedScroll(nestedScrollConnection)
     ) {
-        Text(
-            text = stringResource(R.string.basis),
-            textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
-        )
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState(0))
+        ) {
+            Text(
+                text = stringResource(R.string.basis),
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
+            )
 
-        SettingItem(
-            icon = R.drawable.baseline_format_list_numbered_24,
-            title = stringResource(R.string.setting_hot_num),
-            content = "$newsShowNum",
-            onClick = { showNumberSelectDialog = true }
-        )
+            SettingItem(
+                icon = R.drawable.baseline_format_list_numbered_24,
+                title = stringResource(R.string.setting_hot_num),
+                content = "$newsShowNum",
+                onClick = { showNumberSelectDialog = true }
+            )
 
-        SettingItem(
-            icon = R.drawable.baseline_dark_mode_24,
-            title = stringResource(R.string.setting_dark_mode),
-            content = darkModeDesc,
-            onClick = { showDarkModeSelectDialog = true }
-        )
+            SettingItem(
+                icon = R.drawable.baseline_dark_mode_24,
+                title = stringResource(R.string.setting_dark_mode),
+                content = darkModeDesc,
+                onClick = { showDarkModeSelectDialog = true }
+            )
 
-        SettingItem(
-            icon = R.drawable.baseline_color_lens_24,
-            title = stringResource(R.string.setting_theme),
-            content = colorHex,
-            contentTextColor = MaterialTheme.colorScheme.primary,
-            onClick = { showThemeSelectDialog = true }
-        )
+            SettingItem(
+                icon = R.drawable.baseline_color_lens_24,
+                title = stringResource(R.string.setting_theme),
+                content = colorHex,
+                contentTextColor = MaterialTheme.colorScheme.primary,
+                onClick = { showThemeSelectDialog = true }
+            )
 
-        SettingItem(
-            icon = R.drawable.baseline_replay_circle_filled_24,
-            title = stringResource(R.string.setting_reset_config),
-            content = stringResource(R.string.setting_desc_reset_config),
-            onClick = { showRestConfig = true }
-        )
+            SettingItem(
+                icon = R.drawable.baseline_replay_circle_filled_24,
+                title = stringResource(R.string.setting_reset_config),
+                content = stringResource(R.string.setting_desc_reset_config),
+                onClick = { showRestConfig = true }
+            )
 
-        SettingItem(
-            icon = R.drawable.baseline_export_24,
-            title = stringResource(R.string.setting_export_config),
-            content = stringResource(R.string.setting_desc_export_config),
-            onClick = {
-                event(SettingEvent.ExportFile(context))
-            }
-        )
+            SettingItem(
+                icon = R.drawable.baseline_export_24,
+                title = stringResource(R.string.setting_export_config),
+                content = stringResource(R.string.setting_desc_export_config),
+                onClick = {
+                    event(SettingEvent.ExportFile(context))
+                }
+            )
 
-        SettingItem(
-            icon = R.drawable.baseline_upload_file_24,
-            title = stringResource(R.string.setting_upload_config),
-            content = stringResource(R.string.setting_desc_upload_config),
-            onClick = {
-                launcher.launch("application/json")
-            }
-        )
+            SettingItem(
+                icon = R.drawable.baseline_upload_file_24,
+                title = stringResource(R.string.setting_upload_config),
+                content = stringResource(R.string.setting_desc_upload_config),
+                onClick = {
+                    launcher.launch("application/json")
+                }
+            )
 
-        Text(
-            text = stringResource(R.string.other),
-            textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
-        )
+            Text(
+                text = stringResource(R.string.other),
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
+            )
 
-        SettingItem(
-            icon = R.drawable.baseline_code_24,
-            title = stringResource(R.string.about),
-            content = "${context.getAppVersionName()}(${context.getAppVersionCode()})",
-            onClick = {
-                context.jumpToBrowser("https://github.com/QCuncle/nowinnews")
-            }
-        )
+            SettingItem(
+                icon = R.drawable.baseline_code_24,
+                title = stringResource(R.string.about),
+                content = "${context.getAppVersionName()}(${context.getAppVersionCode()})",
+                onClick = {
+                    context.jumpToBrowser("https://github.com/QCuncle/nowinnews")
+                }
+            )
 
-        SettingItem(
-            icon = R.drawable.baseline_telegram,
-            title = stringResource(R.string.setting_swipe_water),
-            content = stringResource(R.string.setting_desc_chat),
-            onClick = {
-                context.jumpToBrowser("https://t.me/nowinnews")
-            }
-        )
+            SettingItem(
+                icon = R.drawable.baseline_telegram,
+                title = stringResource(R.string.setting_swipe_water),
+                content = stringResource(R.string.setting_desc_chat),
+                onClick = {
+                    context.jumpToBrowser("https://t.me/nowinnews")
+                }
+            )
+        }
     }
 
     if (showNumberSelectDialog) {
