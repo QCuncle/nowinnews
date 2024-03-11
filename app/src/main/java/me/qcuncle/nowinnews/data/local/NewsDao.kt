@@ -26,6 +26,6 @@ interface NewsDao {
     @Query("SELECT * FROM Article WHERE siteId IN (:siteIds) AND position <= :count ORDER BY siteId, position")
     fun getArticles(siteIds: List<Int>, count: Int): Flow<List<Article>>
 
-    @Query("SELECT * FROM Article WHERE title LIKE '%' || :keyword || '%' OR siteName LIKE '%' || :keyword || '%'")
+    @Query("SELECT * FROM Article WHERE title LIKE '%' || :keyword || '%' ORDER BY siteId, position")
     fun searchNews(keyword: String): Flow<List<Article>>
 }

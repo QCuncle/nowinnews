@@ -3,6 +3,7 @@
     <string name="hot_list">热榜</string>
     <string name="bookmark">书签</string>
     <string name="setting">设置</string>
+    <string name="content">内容</string>
     <string name="subscription">订阅</string>
     <string name="unsubscribe">退订</string>
     <string name="setting_theme">主题</string>
@@ -23,6 +24,8 @@
     <string name="dialog_title_delete_bookmark">确认删除此条书签吗?</string>
     <string name="empty_hot_screen">您没有订阅任何热榜，点击右上角开始订阅</string>
     <string name="empty_bookmark_screen">您没有收藏任何书签</string>
+    <string name="empty_search_screen_prefix">未搜索到任何包含</string>
+    <string name="empty_search_screen_suffix">的内容</string>
     <string name="setting_desc_reset_config">恢复至应用初始的订阅配置</string>
     <string name="setting_desc_export_config">将本地的订阅配置导出成 JSON 文件</string>
     <string name="setting_desc_upload_config">从 JSON 文件中更新订阅配置列表</string>

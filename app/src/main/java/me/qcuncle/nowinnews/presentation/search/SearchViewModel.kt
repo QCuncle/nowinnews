@@ -1,4 +1,4 @@
-package me.qcuncle.nowinnews.presentation.subscription
+package me.qcuncle.nowinnews.presentation.search
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -6,52 +6,57 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import me.qcuncle.nowinnews.data.local.SiteConfigDao
+import me.qcuncle.nowinnews.domain.model.Article
+import me.qcuncle.nowinnews.domain.model.Bookmark
 import me.qcuncle.nowinnews.domain.model.SiteConfig
-import me.qcuncle.nowinnews.domain.usecases.node.GetSiteConfigs
-import me.qcuncle.nowinnews.domain.usecases.node.InsertSiteConfig
 import me.qcuncle.nowinnews.domain.usecases.node.SubscriptionSite
 import me.qcuncle.nowinnews.domain.usecases.node.UnsubscribeSite
+import me.qcuncle.nowinnews.domain.usecases.search.SearchArticlesByKeyword
+import me.qcuncle.nowinnews.domain.usecases.search.SearchBookmarkByKeyword
+import me.qcuncle.nowinnews.presentation.subscription.SharedViewModel
 import me.qcuncle.nowinnews.presentation.subscription.compoments.SubscriptionStatus
 import javax.inject.Inject
 
 @HiltViewModel
-class NodeViewModel @Inject constructor(
+class SearchViewModel @Inject constructor(
     private val sharedViewModel: SharedViewModel,
-    private val getSiteConfigs: GetSiteConfigs,
+    private val searchArticlesByKeyword: SearchArticlesByKeyword,
+    private val siteConfigDao: SiteConfigDao,
+    private val searchBookmarkByKeyword: SearchBookmarkByKeyword,
     private val subscriptionSite: SubscriptionSite,
-    private val unsubscribeSite: UnsubscribeSite,
-    private val insertSiteConfig: InsertSiteConfig,
+    private val unsubscribeSite: UnsubscribeSite
 ) : ViewModel() {
 
-    private val _nodeData = MutableStateFlow(emptyList<SiteConfig>())
-    val nodeData: StateFlow<List<SiteConfig>> = _nodeData.asStateFlow()
+    private val _articles = mutableStateOf(emptyList<Article>())
+    val articles: State<List<Article>> = _articles
+
+    private val _siteConfigs = mutableStateOf(emptyList<SiteConfig>())
+    val siteConfig: State<List<SiteConfig>> = _siteConfigs
+
+    private val _bookmarks = mutableStateOf(emptyList<Bookmark>())
+    val bookmarks: State<List<Bookmark>> = _bookmarks
 
     private val _dialogState = mutableStateOf(SubscriptionStatus.IDLE)
     val dialogState: State<SubscriptionStatus> = _dialogState
 
     private var _currentState = SubscriptionStatus.IDLE
 
-    init {
-        // Observe changes in remoteData and update _hotData accordingly
-        viewModelScope.launch(Dispatchers.IO) {
-            // Local data
-            getSiteConfigs().collect { localData ->
-                _nodeData.value = localData
-            }
-        }
+    private val _isEmpty = mutableStateOf(true)
+    val isEmpty: State<Boolean> = _isEmpty
 
+    init {
         viewModelScope.launch(Dispatchers.IO) {
             sharedViewModel.articlesFlow
                 .collect {
                     // 只有真正订阅成功才修改订阅状态
                     subscriptionSite(it.id)
                     sharedViewModel.subscriptionMap[it.id] = true
+                    updateSiteConfig()
                     setDialogStatus(SubscriptionStatus.SUCCESS)
                     delay(1500)
                     if (_currentState == SubscriptionStatus.SUCCESS) {
@@ -61,9 +66,13 @@ class NodeViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(event: NodeEvent) {
+    fun onEvent(event: SearchEvent) {
         when (event) {
-            is NodeEvent.SubscriptionEvent -> {
+            is SearchEvent.Search -> {
+                search(event.keyword)
+            }
+
+            is SearchEvent.SubscriptionEvent -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     // subscriptionSite(event.id)
                     sharedViewModel.refresh(event.id)
@@ -82,36 +91,40 @@ class NodeViewModel @Inject constructor(
                 }
             }
 
-            is NodeEvent.UnsubscribeEvent -> {
+            is SearchEvent.UnsubscribeEvent -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     unsubscribeSite(event.id)
                     sharedViewModel.subscriptionMap[event.id] = false
+                    updateSiteConfig()
                 }
             }
+        }
+    }
 
-            is NodeEvent.ToppingEvent -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    // 将目标 SiteConfig 置顶（将其 sort 设为最小值）
-                    val updatedSiteConfigs = getSiteConfigs().first()
-                    val targetSort = event.siteConfig.sort
-
-                    // 更新其他 SiteConfig 的 sort 字段，确保排序的一致性
-                    updatedSiteConfigs.forEachIndexed point@{ index, siteConfig ->
-                        if (siteConfig.sort > targetSort) return@point
-                        if (siteConfig.id == event.siteConfig.id) {
-                            siteConfig.sort = 0
-                        } else {
-                            siteConfig.sort = index + 1
-                        }
-                    }
-                    insertSiteConfig(updatedSiteConfigs)
-                }
-            }
+    private fun search(keyword: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val articles = async { searchArticlesByKeyword(keyword).first() }
+            val siteConfigs = async { siteConfigDao.getSubscriptionSiteByKeyword(keyword).first() }
+            val bookmarks = async { searchBookmarkByKeyword(keyword).first() }
+            _articles.value = if (keyword.isEmpty()) emptyList() else articles.await()
+            _siteConfigs.value = if (keyword.isEmpty()) emptyList() else siteConfigs.await()
+            _bookmarks.value = if (keyword.isEmpty()) emptyList() else bookmarks.await()
+            _isEmpty.value = articles.await().isEmpty()
+                    && siteConfigs.await().isEmpty()
+                    && bookmarks.await().isEmpty()
         }
     }
 
     private fun setDialogStatus(status: SubscriptionStatus) {
         _dialogState.value = status
         _currentState = status
+    }
+
+    private fun updateSiteConfig() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val ids: List<Int> = _siteConfigs.value.map { it.id }
+            val tempSiteConfigs = siteConfigDao.getSubscriptionSiteByIds(ids)
+            _siteConfigs.value = tempSiteConfigs
+        }
     }
 }

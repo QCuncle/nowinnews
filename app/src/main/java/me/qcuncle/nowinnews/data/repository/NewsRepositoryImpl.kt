@@ -85,6 +85,6 @@ class NewsRepositoryImpl @Inject constructor(
     }
 
     override fun searchArticles(keyword: String): Flow<List<Article>> {
-        TODO("Not yet implemented")
+        return newsDao.searchNews(keyword)
     }
 }

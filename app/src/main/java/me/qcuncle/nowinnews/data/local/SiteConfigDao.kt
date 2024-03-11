@@ -47,6 +47,18 @@ interface SiteConfigDao {
     @Query("SELECT id FROM SiteConfig WHERE isSubscribed = 1")
     fun getSubscriptionSiteIds(): List<Int>
 
+    /**
+     * 根据 ID 查询配置
+     */
     @Query("SELECT * FROM SiteConfig WHERE id = :id")
     fun getSubscriptionSiteById(id: Int): Flow<SiteConfig?>
+
+    /**
+     * 根据网站名称查询配置信息
+     */
+    @Query("SELECT * FROM SITECONFIG WHERE name LIKE '%' || :keyword || '%' ORDER BY sort ASC")
+    fun getSubscriptionSiteByKeyword(keyword: String): Flow<List<SiteConfig>>
+
+    @Query("SELECT * FROM SITECONFIG WHERE id in (:ids)")
+    suspend fun getSubscriptionSiteByIds(ids: List<Int>): List<SiteConfig>
 }

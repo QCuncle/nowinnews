@@ -1,7 +1,6 @@
 package me.qcuncle.nowinnews.presentation.navigator.compoments
 
 import android.content.res.Configuration
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -15,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,13 +43,13 @@ fun NinTopBar(
 
         Spacer(modifier = Modifier.weight(1f))
 
-//        ThemedXmlDrawable(
-//            drawableResId = R.drawable.baseline_search_24,
-//            modifier = Modifier
-//                .clip(CircleShape)
-//                .clickable(onClick = onSearchClick)
-//                .padding(horizontal = 16.dp, vertical = 6.dp)
-//        )
+        ThemedXmlDrawable(
+            drawableResId = R.drawable.baseline_search_24,
+            modifier = Modifier
+                .clip(CircleShape)
+                .clickable(onClick = onSearchClick)
+                .padding(horizontal = 16.dp, vertical = 6.dp)
+        )
 
         ThemedXmlDrawable(
             drawableResId = R.drawable.baseline_public_24,

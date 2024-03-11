@@ -30,9 +30,11 @@ enum class SubscriptionStatus {
 @Composable
 fun SubscriptionDialog(
     status: SubscriptionStatus,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = Modifier
+            .then(modifier)
             .width(200.dp)
             .height(70.dp)
             .background(

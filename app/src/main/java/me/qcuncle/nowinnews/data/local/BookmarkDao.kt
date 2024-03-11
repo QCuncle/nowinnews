@@ -26,4 +26,7 @@ interface BookmarkDao {
      */
     @Query("SELECT * from Bookmark ORDER BY collectionTime DESC")
     fun getAll(): Flow<List<Bookmark>>
+
+    @Query("SELECT * from Bookmark WHERE title LIKE '%' || :keyword || '%' ORDER BY collectionTime ASC")
+    fun getBookmarkByKeyword(keyword: String): Flow<List<Bookmark>>
 }

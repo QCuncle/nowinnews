@@ -13,8 +13,11 @@ import javax.inject.Singleton
 class SharedViewModel @Inject constructor(
     private val refreshArticles: RefreshArticles,
 ) : ViewModel() {
-    private val _articlesFlow = MutableSharedFlow<SiteEntity>() // 假设你的文章是Article类
+
+    private val _articlesFlow = MutableSharedFlow<SiteEntity>()
     val articlesFlow: SharedFlow<SiteEntity> get() = _articlesFlow
+
+    val subscriptionMap = hashMapOf<Int, Boolean>()
 
     suspend fun refresh(id: Int) {
         refreshArticles(id).firstOrNull()?.let {

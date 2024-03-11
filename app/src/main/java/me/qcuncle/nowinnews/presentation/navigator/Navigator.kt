@@ -8,7 +8,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -35,6 +34,8 @@ import me.qcuncle.nowinnews.presentation.navigator.compoments.BottomNavigation
 import me.qcuncle.nowinnews.presentation.navigator.compoments.BottomNavigationItem
 import me.qcuncle.nowinnews.presentation.navigator.compoments.NinTopBar
 import me.qcuncle.nowinnews.presentation.nvgraph.Route
+import me.qcuncle.nowinnews.presentation.search.SearchScreen
+import me.qcuncle.nowinnews.presentation.search.SearchViewModel
 import me.qcuncle.nowinnews.presentation.setting.SettingScreen
 import me.qcuncle.nowinnews.presentation.setting.SettingViewModel
 import me.qcuncle.nowinnews.presentation.subscription.NodeListScreen
@@ -217,7 +218,23 @@ fun Navigator() {
                 )
             }
             composable(route = Route.SearchScreen.route) {
-                Text(text = "SearchScreen")
+                val viewModel: SearchViewModel = hiltViewModel()
+                val articles = viewModel.articles
+                val siteConfigs = viewModel.siteConfig
+                val bookmarks = viewModel.bookmarks
+                val dialogState = viewModel.dialogState
+                val isEmpty = viewModel.isEmpty
+                SearchScreen(
+                    articles = articles.value,
+                    siteConfigs = siteConfigs.value,
+                    bookmarks = bookmarks.value,
+                    dialogState = dialogState.value,
+                    isEmpty = isEmpty.value,
+                    event = viewModel::onEvent,
+                    onBackClick = {
+                        navController.navigateUp()
+                    }
+                )
             }
             composable(route = Route.NodeScreen.route) {
                 pageTitle = titleSubscription
