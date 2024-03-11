@@ -12,11 +12,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -99,7 +99,11 @@ fun SearchScreen(
                 onBackClick = onBackClick
             )
 
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState(0))
+            ) {
                 if (keyword.isNotEmpty()) {
                     if (siteConfigs.isNotEmpty()) {
                         Text(
@@ -108,10 +112,8 @@ fun SearchScreen(
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
                         )
-                        LazyColumn {
-                            items(siteConfigs) { siteConfig ->
-                                SearchSiteItem(siteConfig = siteConfig, event = event)
-                            }
+                        siteConfigs.forEach { siteConfig ->
+                            SearchSiteItem(siteConfig = siteConfig, event = event)
                         }
                     }
 
@@ -122,18 +124,16 @@ fun SearchScreen(
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
                         )
-                        LazyColumn {
-                            items(articles) { article ->
-                                SearchArticleItem(
-                                    siteName = article.siteName,
-                                    title = article.title,
-                                    popularity = article.popularity,
-                                    url = article.url,
-                                    imageUrl = article.imageUrl,
-                                    siteIconUrl = article.siteIconUrl,
-                                    displayContent = article.updateTime.formatDisplayTime()
-                                )
-                            }
+                        articles.forEach { article ->
+                            SearchArticleItem(
+                                siteName = article.siteName,
+                                title = article.title,
+                                popularity = article.popularity,
+                                url = article.url,
+                                imageUrl = article.imageUrl,
+                                siteIconUrl = article.siteIconUrl,
+                                displayContent = article.updateTime.formatDisplayTime()
+                            )
                         }
                     }
 
@@ -144,18 +144,16 @@ fun SearchScreen(
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
                         )
-                        LazyColumn {
-                            items(bookmarks) { bookmark ->
-                                SearchArticleItem(
-                                    siteName = bookmark.siteName,
-                                    title = bookmark.title,
-                                    popularity = bookmark.popularity,
-                                    url = bookmark.url,
-                                    imageUrl = bookmark.imageUrl,
-                                    siteIconUrl = bookmark.siteIconUrl,
-                                    displayContent = bookmark.collectionTime.formatDisplayTime() + "收藏"
-                                )
-                            }
+                        bookmarks.forEach { bookmark ->
+                            SearchArticleItem(
+                                siteName = bookmark.siteName,
+                                title = bookmark.title,
+                                popularity = bookmark.popularity,
+                                url = bookmark.url,
+                                imageUrl = bookmark.imageUrl,
+                                siteIconUrl = bookmark.siteIconUrl,
+                                displayContent = bookmark.collectionTime.formatDisplayTime() + "收藏"
+                            )
                         }
                     }
                 }
