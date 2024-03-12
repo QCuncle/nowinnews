@@ -146,7 +146,7 @@
   {
     "id": 8,
     "sort": 8,
-    "isSubscribed": true,
+    "isSubscribed": false,
     "delay": 500,
     "name": "虎扑-步行街",
     "host": "https://bbs.hupu.com",
