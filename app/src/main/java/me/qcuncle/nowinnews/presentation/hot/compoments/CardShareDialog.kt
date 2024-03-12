@@ -1,7 +1,6 @@
 package me.qcuncle.nowinnews.presentation.hot.compoments
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -114,7 +113,6 @@ fun CardShareDialog(
 
                 LaunchedEffect(Unit) {
                     delay(300L)
-                    Log.d("LaunchedEffect", "LaunchedEffect")
                     val bitmapAsync = captureController.captureAsync()
                     try {
                         cardScreenshot = bitmapAsync.await().asAndroidBitmap()
