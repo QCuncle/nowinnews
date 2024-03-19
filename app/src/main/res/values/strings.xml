@@ -35,4 +35,7 @@
     <string name="node_screen_top_tip">订阅受网站和网络等因素影响，若订阅失败请重试</string>
     <string name="setting_swipe_water">划水</string>
     <string name="setting_desc_chat">来一起划水</string>
+    <string name="collection">收藏</string>
+    <string name="delete">删除</string>
+    <string name="bookmarked">已收藏为书签</string>
 </resources>

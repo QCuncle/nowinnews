@@ -14,6 +14,7 @@ import me.qcuncle.nowinnews.data.local.SiteConfigDao
 import me.qcuncle.nowinnews.domain.model.Article
 import me.qcuncle.nowinnews.domain.model.Bookmark
 import me.qcuncle.nowinnews.domain.model.SiteConfig
+import me.qcuncle.nowinnews.domain.usecases.bookmark.AddBookmark
 import me.qcuncle.nowinnews.domain.usecases.node.SubscriptionSite
 import me.qcuncle.nowinnews.domain.usecases.node.UnsubscribeSite
 import me.qcuncle.nowinnews.domain.usecases.search.SearchArticlesByKeyword
@@ -29,7 +30,8 @@ class SearchViewModel @Inject constructor(
     private val siteConfigDao: SiteConfigDao,
     private val searchBookmarkByKeyword: SearchBookmarkByKeyword,
     private val subscriptionSite: SubscriptionSite,
-    private val unsubscribeSite: UnsubscribeSite
+    private val unsubscribeSite: UnsubscribeSite,
+    private val addBookmark: AddBookmark
 ) : ViewModel() {
 
     private val _articles = mutableStateOf(emptyList<Article>())
@@ -72,7 +74,7 @@ class SearchViewModel @Inject constructor(
                 search(event.keyword)
             }
 
-            is SearchEvent.SubscriptionEvent -> {
+            is SearchEvent.Subscription -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     // subscriptionSite(event.id)
                     sharedViewModel.refresh(event.id)
@@ -91,11 +93,17 @@ class SearchViewModel @Inject constructor(
                 }
             }
 
-            is SearchEvent.UnsubscribeEvent -> {
+            is SearchEvent.Unsubscribe -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     unsubscribeSite(event.id)
                     sharedViewModel.subscriptionMap[event.id] = false
                     updateSiteConfig()
+                }
+            }
+
+            is SearchEvent.Collect -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    addBookmark.invoke(event.article)
                 }
             }
         }

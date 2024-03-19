@@ -26,6 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -203,10 +204,10 @@ fun ViewMoreItem(
         }
 
         NewsButton(
-            text = "收藏",
+            text = stringResource(R.string.collection),
             modifier = Modifier.weight(2f)
         ) {
-            context.showToast("收藏成功")
+            context.showToast(R.string.bookmarked)
             addBookmark(article)
         }
     }

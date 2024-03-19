@@ -42,6 +42,6 @@ fun Long.formatDisplayTime(format: TimeFormat = TimeFormat.DEFAULT_FORMAT): Stri
         diffMillis < 60 * 60 * 1000 -> "${diffMillis / (60 * 1000)}分钟前"
         diffMillis < 24 * 60 * 60 * 1000 -> "${diffMillis / (60 * 60 * 1000)}小时前"
         diffMillis < 48 * 60 * 60 * 1000 -> "昨天"
-        else -> this.formatTime()
+        else -> this.formatTime(format)
     }
 }

@@ -58,8 +58,10 @@ import me.qcuncle.nowinnews.presentation.subscription.compoments.SubscriptionDia
 import me.qcuncle.nowinnews.presentation.subscription.compoments.SubscriptionStatus
 import me.qcuncle.nowinnews.ui.components.EmptyView
 import me.qcuncle.nowinnews.ui.components.ThemedXmlDrawable
+import me.qcuncle.nowinnews.util.TimeFormat
 import me.qcuncle.nowinnews.util.formatDisplayTime
 import me.qcuncle.nowinnews.util.jumpToBrowser
+import me.qcuncle.nowinnews.util.showToast
 
 @Composable
 fun SearchScreen(
@@ -71,6 +73,7 @@ fun SearchScreen(
     event: (SearchEvent) -> Unit,
     onBackClick: () -> Unit
 ) {
+    val context = LocalContext.current
     var keyword by remember { mutableStateOf("") }
     val annotatedString = buildAnnotatedString {
         append(stringResource(id = R.string.empty_search_screen_prefix))
@@ -117,26 +120,6 @@ fun SearchScreen(
                         }
                     }
 
-                    if (articles.isNotEmpty()) {
-                        Text(
-                            text = stringResource(R.string.content),
-                            textAlign = TextAlign.Start,
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
-                        )
-                        articles.forEach { article ->
-                            SearchArticleItem(
-                                siteName = article.siteName,
-                                title = article.title,
-                                popularity = article.popularity,
-                                url = article.url,
-                                imageUrl = article.imageUrl,
-                                siteIconUrl = article.siteIconUrl,
-                                displayContent = article.updateTime.formatDisplayTime()
-                            )
-                        }
-                    }
-
                     if (bookmarks.isNotEmpty()) {
                         Text(
                             text = stringResource(R.string.bookmark),
@@ -152,7 +135,34 @@ fun SearchScreen(
                                 url = bookmark.url,
                                 imageUrl = bookmark.imageUrl,
                                 siteIconUrl = bookmark.siteIconUrl,
-                                displayContent = bookmark.collectionTime.formatDisplayTime() + "收藏"
+                                displayContent = bookmark.collectionTime
+                                    .formatDisplayTime(TimeFormat.FORMAT2)
+                                        + stringResource(id = R.string.collection)
+                            )
+                        }
+                    }
+
+                    if (articles.isNotEmpty()) {
+                        Text(
+                            text = stringResource(R.string.content),
+                            textAlign = TextAlign.Start,
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
+                        )
+                        articles.forEach { article ->
+                            SearchArticleItem(
+                                siteName = article.siteName,
+                                title = article.title,
+                                popularity = article.popularity,
+                                url = article.url,
+                                imageUrl = article.imageUrl,
+                                siteIconUrl = article.siteIconUrl,
+                                displayContent = article.updateTime.formatDisplayTime(),
+                                showFavoriteButton = true,
+                                favoriteAction = {
+                                    event(SearchEvent.Collect(article))
+                                    context.showToast(R.string.bookmarked)
+                                }
                             )
                         }
                     }
@@ -324,11 +334,11 @@ fun SearchSiteItem(
 
         if (siteConfig.isSubscribed) {
             NewsCancelButton(text = stringResource(R.string.unsubscribe)) {
-                event(SearchEvent.UnsubscribeEvent(siteConfig.id))
+                event(SearchEvent.Unsubscribe(siteConfig.id))
             }
         } else {
             NewsButton(text = stringResource(id = R.string.subscription)) {
-                event(SearchEvent.SubscriptionEvent(siteConfig.id))
+                event(SearchEvent.Subscription(siteConfig.id))
             }
         }
 
@@ -352,6 +362,8 @@ fun SearchArticleItem(
     imageUrl: String,
     siteIconUrl: String,
     displayContent: String,
+    showFavoriteButton: Boolean = false,
+    favoriteAction: () -> Unit = {},
 ) {
     val context = LocalContext.current
     Row(
@@ -386,7 +398,9 @@ fun SearchArticleItem(
             )
         }
         Column(
-            modifier = Modifier.padding(start = 16.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp)
         ) {
             Text(
                 text = title,
@@ -441,6 +455,17 @@ fun SearchArticleItem(
                     textAlign = TextAlign.Start,
                     style = MaterialTheme.typography.bodySmall,
                 )
+            }
+
+            if (showFavoriteButton) {
+                NewsButton(
+                    text = stringResource(id = R.string.collection),
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .padding(top = 4.dp)
+                ) {
+                    favoriteAction()
+                }
             }
         }
     }

@@ -46,6 +46,7 @@ import me.qcuncle.nowinnews.presentation.common.NewsCancelTextButton
 import me.qcuncle.nowinnews.presentation.common.NewsTextButton
 import me.qcuncle.nowinnews.ui.components.EmptyView
 import me.qcuncle.nowinnews.ui.components.ThemedXmlDrawable
+import me.qcuncle.nowinnews.util.TimeFormat
 import me.qcuncle.nowinnews.util.formatDisplayTime
 import me.qcuncle.nowinnews.util.jumpToBrowser
 
@@ -214,14 +215,14 @@ fun BookMarkItem(
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Text(
-                    text = "${bookmark.collectionTime.formatDisplayTime()}收藏",
+                    text = "${bookmark.collectionTime.formatDisplayTime(TimeFormat.FORMAT2)}收藏",
                     textAlign = TextAlign.Start,
                     style = MaterialTheme.typography.bodySmall,
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                NewsCancelTextButton(text = "删除") {
+                NewsCancelTextButton(text = stringResource(R.string.delete)) {
                     deleteBookmark(bookmark.url)
                 }
             }
