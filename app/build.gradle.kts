@@ -85,7 +85,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.9"
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
     packaging {
         resources {
@@ -107,6 +107,7 @@ dependencies {
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
+    implementation(libs.material)
     implementation(libs.material3)
     implementation(libs.core.splashscreen)
     implementation(libs.accompanist.systemuicontroller)

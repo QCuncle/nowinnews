@@ -9,6 +9,7 @@ hilt-navigation-compose = "1.0.0"
 jsoup = "1.17.2"
 jsoupxpath = "2.5.3"
 kotlinx-serialization-json = "1.6.3"
+material3 = "1.3.0-alpha02"
 navigation = "2.6.0"
 retrofit = "2.9.0"
 room = "2.5.2"
@@ -20,8 +21,8 @@ junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 lifecycle = "2.6.2"
-activity-compose = "1.8.0"
-compose = "1.6.2"
+activity-compose = "1.8.2"
+compose = "1.6.3"
 compose-bom = "2024.02.01"
 datastore = "1.0.0"
 
@@ -58,7 +59,8 @@ ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref =
 ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-material3 = { group = "androidx.compose.material3", name = "material3" }
+material = { group = "androidx.compose.material", name = "material", version.ref = "compose" }
+material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 #datastore = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastore" }
 #datastore-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastore" }
 datastore-preference = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
