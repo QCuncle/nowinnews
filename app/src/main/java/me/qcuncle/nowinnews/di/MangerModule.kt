@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import me.qcuncle.nowinnews.data.manager.LocalUserManagerImpl
 import me.qcuncle.nowinnews.data.manager.SubscriptionManagerImpl
+import me.qcuncle.nowinnews.data.remote.NewsApi
 import me.qcuncle.nowinnews.data.remote.NewsRequestImpl
 import me.qcuncle.nowinnews.domain.manager.LocalUserManager
 import me.qcuncle.nowinnews.domain.manager.SubscriptionManager
@@ -25,5 +26,5 @@ abstract class MangerModule {
 
     @Binds
     @Singleton
-    abstract fun bindNewsRequestImpl(newsRequestImpl: NewsRequestImpl): NewsRequestImpl
+    abstract fun bindNewsRequestImpl(newsRequestImpl: NewsRequestImpl): NewsApi
 }

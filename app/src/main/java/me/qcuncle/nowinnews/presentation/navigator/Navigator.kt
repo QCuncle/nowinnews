@@ -180,9 +180,11 @@ fun Navigator() {
                 val siteEntities = viewModel.hotData.collectAsState(initial = emptyList())
                 val isLoading = viewModel.isLoading
                 val isEmpty = viewModel.isEmpty
+                val isRefresh = viewModel.refreshing
                 HotListScreen(
                     isLoading = isLoading.value,
                     isEmpty = isEmpty.value,
+                    isRefreshing = isRefresh.value,
                     siteEntities = siteEntities.value,
                     event = viewModel::onEvent,
                     viewMore = { id ->

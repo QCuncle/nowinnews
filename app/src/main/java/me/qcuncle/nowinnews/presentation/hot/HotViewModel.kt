@@ -48,6 +48,9 @@ class HotViewModel @Inject constructor(
     private val _isEmpty = mutableStateOf(false)
     val isEmpty: State<Boolean> = _isEmpty
 
+    private val _refreshing = mutableStateOf(false)
+    val refreshing: State<Boolean> = _refreshing
+
     private var _siteConfigs: List<SiteConfig> = listOf()
 
     init {
@@ -84,9 +87,6 @@ class HotViewModel @Inject constructor(
                         _isEmpty.value = currentHotData.isEmpty()
                     } else if (matchingEntity == null && siteConfig.isSubscribed) {
                         sharedViewModel.refresh(siteConfig.id)
-//                        refreshArticles(siteConfig.id).collect {
-//                            updateRemoteData(it)
-//                        }
                     }
                 }
             }
@@ -104,37 +104,12 @@ class HotViewModel @Inject constructor(
                 }
             }
         }
-        // refreshAll()
-    }
-
-    private fun refreshAll() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val siteConfigs = siteConfigDao.getSubscriptionSiteIds()
-            if (siteConfigs.isEmpty()) {
-                _isLoading.value = false
-            } else {
-                val jobs = siteConfigs.map { id ->
-                    async {
-                        withContext(Dispatchers.IO) {
-                            sharedViewModel.refresh(id)
-//                            refreshArticles(siteConfig).collect {
-//                                updateRemoteData(it)
-//                            }
-                        }
-                    }
-                }
-                jobs.awaitAll()
-            }
-        }
     }
 
     private fun refreshById(id: Int) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 sharedViewModel.refresh(id)
-//                refreshArticles(id).collect {
-//                    updateRemoteData(it)
-//                }
             }
         }
     }
@@ -176,7 +151,21 @@ class HotViewModel @Inject constructor(
     fun onEvent(event: HotEvent) {
         when (event) {
             is HotEvent.RefreshAll -> {
-
+                viewModelScope.launch(Dispatchers.IO) {
+                    val siteConfigs = siteConfigDao.getSubscriptionSiteIds()
+                    if (siteConfigs.isEmpty()) {
+                        _refreshing.value = false
+                    } else {
+                        _refreshing.value = true
+                        val jobs = siteConfigs.map { id ->
+                            async {
+                                sharedViewModel.refresh(id)
+                            }
+                        }
+                        jobs.awaitAll()
+                        _refreshing.value = false
+                    }
+                }
             }
 
             is HotEvent.RefreshCardEvent -> {

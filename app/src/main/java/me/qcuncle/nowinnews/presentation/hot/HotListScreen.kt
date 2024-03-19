@@ -5,6 +5,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,10 +32,12 @@ import me.qcuncle.nowinnews.presentation.hot.compoments.HotArticleCard
 import me.qcuncle.nowinnews.ui.components.EmptyView
 import me.qcuncle.nowinnews.ui.theme.NinTheme
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HotListScreen(
     isLoading: Boolean,
     isEmpty: Boolean,
+    isRefreshing: Boolean,
     siteEntities: List<SiteEntity>,
     onBottomBarVisible: (Boolean) -> Unit,
     event: (HotEvent) -> Unit,
@@ -60,11 +67,21 @@ fun HotListScreen(
         }
     }
 
+    val state = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = {
+            if (!isRefreshing) {
+                event(HotEvent.RefreshAll)
+            }
+        }
+    )
+
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .pullRefresh(state),
         contentAlignment = Alignment.TopCenter
     ) {
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -107,6 +124,13 @@ fun HotListScreen(
                 text = stringResource(R.string.empty_hot_screen)
             )
         }
+
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = state,
+            modifier = Modifier.align(Alignment.TopCenter),
+            contentColor = MaterialTheme.colorScheme.primary
+        )
     }
 }
 

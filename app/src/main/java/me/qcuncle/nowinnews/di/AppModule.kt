@@ -13,21 +13,11 @@ import me.qcuncle.nowinnews.data.local.NewsDatabase
 import me.qcuncle.nowinnews.data.local.SiteConfigDao
 import me.qcuncle.nowinnews.data.local.SiteConfigDatabase
 import me.qcuncle.nowinnews.data.local.SiteConfigTypeConvertor
-import me.qcuncle.nowinnews.data.remote.NewsApi
-import me.qcuncle.nowinnews.data.remote.NewsRequestImpl
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
-    @Provides
-    @Singleton
-    fun provideNewsApiInstance(
-        application: Application
-    ): NewsApi {
-        return NewsRequestImpl(application)
-    }
 
     @Provides
     @Singleton
